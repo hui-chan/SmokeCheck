@@ -18,7 +18,6 @@ public class MainActivity extends AppCompatActivity {
     private ImageView picture;
     private Intent intent1,intent2;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
