@@ -12,11 +12,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 
+
+
 public class MainActivity extends AppCompatActivity {
     public static final int TAKE_PHOTO = 1;
     public static final int CHOOSE_PHOTO = 2;
     private ImageView picture;
     private Intent intent1,intent2;
+
+    private Button openPhotoSelectButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,18 @@ public class MainActivity extends AppCompatActivity {
         });
         intent1=new Intent(this,Albums.class);//创建跳转到Albums显示的窗口的Intent
         intent2=new Intent(this,Camera.class);//创建跳转到Camera显示的窗口的Intent
+
+
+        openPhotoSelectButton = findViewById(R.id.openPhotoSelectButton);
+
+        openPhotoSelectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 启动PhotoSelect Activity
+                Intent intent = new Intent(MainActivity.this, PhotoSelect.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void openAlbum() {
@@ -59,4 +75,5 @@ public class MainActivity extends AppCompatActivity {
     private void startCamera() {
         startActivity(intent2);//进入camera的窗口界面
     }
+
 }
