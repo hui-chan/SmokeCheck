@@ -100,7 +100,8 @@ public class Camera extends Activity {
         public void onClick(View view){
             BitmapDrawable bmpDrawable = (BitmapDrawable) cameraPicture.getDrawable();
             Bitmap bitmap = bmpDrawable.getBitmap();
-            saveToSystemGallery(bitmap);//将图片保存到本地
+            //SavaImage(bitmap,getApplicationContext().getFilesDir().getAbsolutePath());
+            MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, System.currentTimeMillis()+".jpg", "");
             Toast.makeText(getApplicationContext(),"图片保存成功！",Toast.LENGTH_SHORT).show();
             startActivity(intent3);//窗口切换
         }
@@ -123,31 +124,42 @@ public class Camera extends Activity {
                 break;
         }
     }
-    public void saveToSystemGallery(Bitmap bmp) {
-        // 首先保存图片
-        File appDir = new File(Environment.getExternalStorageDirectory(), "Mycamera");
-        if (!appDir.exists()) {
-            appDir.mkdir();
-        }
-        String fileName = System.currentTimeMillis() + ".jpg";
-        File file = new File(appDir, fileName);
-        try {
-            FileOutputStream fos = new FileOutputStream(file);
-            bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-            fos.flush();
-            fos.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        // 其次把文件插入到系统图库
-
-        //sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(file.getAbsolutePath())));
+    /*
+    //保存位图到本地
+    public void SavaImage(Bitmap bitmap, String path) {
+        File file = new File(path);
         Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         Uri uri = Uri.fromFile(file);
         intent.setData(uri);
-        sendBroadcast(intent);// 发送广播，通知图库更新
+        sendBroadcast(intent);
+        FileOutputStream fileOutputStream = null;
+        String filePhth;
+        String fileName;
+        //文件夹不存在，则创建它
+        if (!file.exists()) {
+            file.mkdir();
+        }
+        try {
+            filePhth=path + "/" + System.currentTimeMillis() + ".png";
+            fileName=System.currentTimeMillis()+"";
+            File file1=new File(filePhth);
+            fileOutputStream = new FileOutputStream(file1.getPath());
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+            fileOutputStream.close();
+            //图片路径
+//            MediaStore.Images.Media.insertImage(context.getContentResolver(),
+//                    filePhth,fileName , null);
+            MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, fileName, "");
+            sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + file1.getAbsolutePath())));
+            Log.d("aaa",file1.getAbsolutePath()+"-----"+path);
+//            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(),"保存失败",Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
     }
+    
+     */
+
 }
