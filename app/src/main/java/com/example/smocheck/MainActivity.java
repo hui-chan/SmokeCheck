@@ -20,13 +20,13 @@ public class MainActivity extends AppCompatActivity {
     private ImageView picture;
     private Intent intent1,intent2;
 
-    private Button openPhotoSelectButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //打开相册
         Button chooseFromAlbum = findViewById(R.id.choose_from_album);
         chooseFromAlbum.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,9 +38,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+        //拍照
         Button takePhoto = findViewById(R.id.take_photo);
         picture = findViewById(R.id.picture);
-
         takePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,17 +58,6 @@ public class MainActivity extends AppCompatActivity {
         intent1=new Intent(this,Albums.class);//创建跳转到Albums显示的窗口的Intent
         intent2=new Intent(this,Camera.class);//创建跳转到Camera显示的窗口的Intent
 
-
-        openPhotoSelectButton = findViewById(R.id.openPhotoSelectButton);
-
-        openPhotoSelectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 启动PhotoSelect Activity
-                Intent intent = new Intent(MainActivity.this, PhotoSelect.class);
-                startActivity(intent);
-            }
-        });
     }
 
     private void openAlbum() {

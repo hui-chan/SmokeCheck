@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -32,18 +33,21 @@ import java.io.IOException;
 public class Camera extends Activity {
     private ImageView cameraPicture;
     public static final int TAKE_PHOTO = 1;
-    private Button fogDection=null;//烟雾检测
+    private Button blackDection=null;//黑度检测
     private Button pictureSave=null;//保存图片
+    private TextView tv2=null;//文本显示框
     private Intent intent3;
     private Uri imageUri;
+
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.albums);
-        fogDection=super.findViewById(R.id.pestDetection);//关联起来
+        blackDection=super.findViewById(R.id.blackDetection);//关联起来
         pictureSave=super.findViewById(R.id.pictureSave);
         cameraPicture = super.findViewById(R.id.picture);
+        tv2=super.findViewById(R.id.tv2);
 
         // 创建一个File对象，用于保存摄像头拍下的图片，这里把图片命名为output_image.jpg
         // 并将它存放在手机SD卡的应用关联缓存目录下
@@ -78,7 +82,7 @@ public class Camera extends Activity {
         }
 
         intent3 = new Intent(getApplicationContext(),MainActivity.class);
-        fogDection.setOnClickListener(new Camera.fogDectionFuntion());
+        blackDection.setOnClickListener(new Camera.blackDectionFuntion());
         pictureSave.setOnClickListener(new Camera.pictureSaveFunction());
 
     }
@@ -89,21 +93,24 @@ public class Camera extends Activity {
         startActivityForResult(intent4, TAKE_PHOTO);
     }
 
-    private class fogDectionFuntion implements View.OnClickListener {
+    private class blackDectionFuntion implements View.OnClickListener {
         public void onClick(View view){
             Toast.makeText(getApplicationContext(),"黑度检测",Toast.LENGTH_SHORT).show();
 
             //在这里调用黑度检测方法
+            BitmapDrawable bmpDrawable = (BitmapDrawable) cameraPicture.getDrawable();
+            Bitmap bitmap = bmpDrawable.getBitmap();
+            int blackDegree=BlackDegree.calculateImageLingemannBlackness(bitmap);
+            String text=String.valueOf(blackDegree);
+            tv2.setText("林格曼黑度值为："+text);
         }
     }
     private class pictureSaveFunction implements View.OnClickListener {
         public void onClick(View view){
             BitmapDrawable bmpDrawable = (BitmapDrawable) cameraPicture.getDrawable();
             Bitmap bitmap = bmpDrawable.getBitmap();
-            //SavaImage(bitmap,getApplicationContext().getFilesDir().getAbsolutePath());
             MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, System.currentTimeMillis()+".jpg", "");
             Toast.makeText(getApplicationContext(),"图片保存成功！",Toast.LENGTH_SHORT).show();
-            startActivity(intent3);//窗口切换
         }
     }
     @Override

@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -37,17 +38,19 @@ import java.io.InputStream;
 public class Albums extends Activity {
     private  ImageView albumsPicture;
     public static final int CHOOSE_PHOTO = 2;
-    private Button pestDection=null;
+    private Button blackDection=null;
     private Button pictureSave=null;
     private Intent intent2;
+    private TextView tv2;
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.albums);
-        pestDection=super.findViewById(R.id.pestDetection);
+        blackDection=super.findViewById(R.id.blackDetection);
         pictureSave=super.findViewById(R.id.pictureSave);
         albumsPicture = super.findViewById(R.id.picture);
+        tv2=super.findViewById(R.id.tv2);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, CHOOSE_PHOTO);
@@ -57,7 +60,7 @@ public class Albums extends Activity {
 
         intent2 = new Intent(getApplicationContext(),MainActivity.class);
         //receivePicturefromMainActivaty();
-        pestDection.setOnClickListener(new pestDectionFuntion());
+        blackDection.setOnClickListener(new blackDectionFuntion());
         pictureSave.setOnClickListener(new pictureSaveFunction());
 
     }
@@ -67,9 +70,15 @@ public class Albums extends Activity {
         intent.setType("image/*");
         startActivityForResult(intent, CHOOSE_PHOTO);//打开相册
     }
-    private class pestDectionFuntion implements View.OnClickListener {
+    private class blackDectionFuntion implements View.OnClickListener {
         public void onClick(View view){
-            Toast.makeText(getApplicationContext(),"粮虫检测",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),"黑度检测",Toast.LENGTH_SHORT).show();
+            //在这里调用黑度检测方法
+            BitmapDrawable bmpDrawable = (BitmapDrawable) albumsPicture.getDrawable();
+            Bitmap bitmap = bmpDrawable.getBitmap();
+            int blackDegree=BlackDegree.calculateImageLingemannBlackness(bitmap);
+            String text=String.valueOf(blackDegree);
+            tv2.setText("林格曼黑度值为："+text);
         }
     }
     private class pictureSaveFunction implements View.OnClickListener {
@@ -82,7 +91,6 @@ public class Albums extends Activity {
             Bitmap bitmap = bmpDrawable.getBitmap();
             saveToSystemGallery(bitmap);//将图片保存到本地
             Toast.makeText(getApplicationContext(),"图片保存成功！",Toast.LENGTH_SHORT).show();
-            startActivity(intent2);//窗口切换
         }
     }
     public void saveToSystemGallery(Bitmap bmp) {

@@ -3,12 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <Button
-        android:id="@+id/pestDetection"
+        android:id="@+id/blackDetection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
         android:layout_marginTop="20dp"
-        android:text="图像检测"
+        android:text="黑度检测"
         android:textSize="20dp" />
 
     <Button
@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="保存图像"
-        android:layout_toRightOf="@+id/pestDetection"
+        android:layout_toRightOf="@+id/blackDetection"
         android:layout_marginLeft="80dp"
         android:textSize="20dp" />
 
@@ -25,8 +25,20 @@
         android:id="@+id/picture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/pictureSave"
+        android:layout_below="@+id/tv2"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp" />
+
+    <TextView
+        android:id="@+id/tv2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_below="@id/blackDetection"
+        android:background="#AAAAAA"
+        android:textSize="20sp"
+        />
+
+
 
 </RelativeLayout>
